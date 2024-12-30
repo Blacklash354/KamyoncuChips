@@ -16,13 +16,6 @@ const trafficImages = [
     'assets/images/dusman1.png',
     'assets/images/dusman2.png',
     'assets/images/dusman3.png'
-    'assets/images/dusman4.png'
-    'assets/images/dusman5.png'
-    'assets/images/dusman6.png'
-   'assets/images/dusman7.png' 
-   'assets/images/dusman8.png'
-   'assets/images/dusman9.png'
-   'assets/images/dusman10.png'
 ].map(src => {
     const img = new Image();
     img.src = src;
@@ -34,14 +27,17 @@ let traffic = [];
 let gameOver = false;
 let gameStarted = false;
 let roadOffset = 0; // For simulating road movement
+let score = 0; // For tracking score
 
 const bgMusic = document.getElementById('bg-music');
 const collisionSound = document.getElementById('collision-sound');
+const startSound = new Audio('assets/sounds/start.mp3'); // Start button sound
 
 // Start the game when the button is clicked
 startButton.addEventListener('click', () => {
     gameStarted = true;
     startButton.style.display = 'none';
+    startSound.play(); // Play start sound
     bgMusic.play();
     initTraffic();
     gameLoop();
@@ -89,6 +85,7 @@ function drawTraffic() {
         if (car.y > canvas.height) {
             car.y = -car.height; // Reset car position
             car.x = Math.floor(Math.random() * 4) * 100 + 40;
+            score += 1; // Increase score when a car is passed
         }
         ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
     });
@@ -99,6 +96,12 @@ function drawRoad() {
     if (roadOffset > canvas.height) roadOffset = 0;
     ctx.drawImage(roadImage, 0, roadOffset - canvas.height, canvas.width, canvas.height);
     ctx.drawImage(roadImage, 0, roadOffset, canvas.width, canvas.height);
+}
+
+function drawScore() {
+    ctx.fillStyle = 'white';
+    ctx.font = '20px Arial';
+    ctx.fillText(`Score: ${score}`, 10, 30);
 }
 
 function checkCollision() {
@@ -135,6 +138,7 @@ function gameLoop() {
     drawRoad();
     drawTruck();
     drawTraffic();
+    drawScore();
     checkCollision();
     requestAnimationFrame(gameLoop);
 }
