@@ -44,7 +44,9 @@ const startSound = new Audio('assets/sounds/basla.mp3'); // Start button sound
 startButton.addEventListener('click', () => {
     gameStarted = true;
     startButton.style.display = 'none';
-    startSound.play(); // Play start sound
+    startSound.play().catch(error => {
+        console.error('Start sound could not play:', error);
+    }); // Play start sound
     bgMusic.play();
     initTraffic();
     gameLoop();
