@@ -21,10 +21,11 @@ const trafficImages = [
     return img;
 });
 
-let truck = { x: 200, y: 500, width: 50, height: 80, speedX: 0, speedY: 0 };
+let truck = { x: 200, y: 500, width: 50, height: 80, speedX: 0 };
 let traffic = [];
 let gameOver = false;
 let gameStarted = false;
+let roadOffset = 0; // For simulating road movement
 
 const bgMusic = document.getElementById('bg-music');
 const collisionSound = document.getElementById('collision-sound');
@@ -43,46 +44,47 @@ document.addEventListener('keydown', (e) => {
     if (!gameStarted) return;
     if (e.key === 'ArrowLeft' || e.key === 'a') truck.speedX = -5;
     if (e.key === 'ArrowRight' || e.key === 'd') truck.speedX = 5;
-    if (e.key === 'ArrowUp' || e.key === 'w') truck.speedY = -5;
-    if (e.key === 'ArrowDown' || e.key === 's') truck.speedY = 5;
 });
 
 document.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'ArrowRight' || e.key === 'd') truck.speedX = 0;
-    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'ArrowDown' || e.key === 's') truck.speedY = 0;
 });
 
 function drawTruck() {
     truck.x += truck.speedX;
-    truck.y += truck.speedY;
 
     if (truck.x < 0) truck.x = 0;
     if (truck.x + truck.width > canvas.width) truck.x = canvas.width - truck.width;
-    if (truck.y < 0) truck.y = 0;
-    if (truck.y + truck.height > canvas.height) truck.y = canvas.height - truck.height;
 
     ctx.drawImage(truckImage, truck.x, truck.y, truck.width, truck.height);
 }
 
 function initTraffic() {
     // Initialize traffic cars
-    for (let i = 0; i < 5; i++) {  // Reduced traffic cars
+    for (let i = 0; i < 5; i++) { // Reduced number of cars
         const lane = Math.floor(Math.random() * 4) * 100 + 40;
-        const carY = Math.random() * -canvas.height * 2; // Start off-screen
+        const carY = Math.random() * -canvas.height * 2; // Place cars randomly off-screen
         const image = trafficImages[Math.floor(Math.random() * trafficImages.length)];
-        traffic.push({ x: lane, y: carY, width: 50, height: 80, image, speed: 1 + Math.random() * 2 }); // Slower speed
+        traffic.push({ x: lane, y: carY, width: 50, height: 80, image });
     }
 }
 
 function drawTraffic() {
     traffic.forEach(car => {
-        ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
-        car.y += car.speed; // Cars move down
+        car.y += 2; // Simulate road moving down
         if (car.y > canvas.height) {
             car.y = -car.height; // Reset car position
             car.x = Math.floor(Math.random() * 4) * 100 + 40;
         }
+        ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
     });
+}
+
+function drawRoad() {
+    roadOffset += 2;
+    if (roadOffset > canvas.height) roadOffset = 0;
+    ctx.drawImage(roadImage, 0, roadOffset - canvas.height, canvas.width, canvas.height);
+    ctx.drawImage(roadImage, 0, roadOffset, canvas.width, canvas.height);
 }
 
 function checkCollision() {
@@ -116,7 +118,7 @@ function gameLoop() {
         return;
     }
 
-    ctx.drawImage(roadImage, 0, 0, canvas.width, canvas.height);
+    drawRoad();
     drawTruck();
     drawTraffic();
     checkCollision();
