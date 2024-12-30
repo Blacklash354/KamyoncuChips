@@ -1,3 +1,4 @@
+// HTML Structure
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
@@ -21,7 +22,7 @@ const trafficImages = [
     return img;
 });
 
-let truck = { x: 200, y: 500, width: 50, height: 80, speedX: 0 };
+let truck = { x: 200, y: 500, width: 50, height: 80, speedX: 0, speedY: 0 };
 let traffic = [];
 let gameOver = false;
 let gameStarted = false;
@@ -44,24 +45,30 @@ document.addEventListener('keydown', (e) => {
     if (!gameStarted) return;
     if (e.key === 'ArrowLeft' || e.key === 'a') truck.speedX = -5;
     if (e.key === 'ArrowRight' || e.key === 'd') truck.speedX = 5;
+    if (e.key === 'ArrowUp' || e.key === 'w') truck.speedY = -5;
+    if (e.key === 'ArrowDown' || e.key === 's') truck.speedY = 5;
 });
 
 document.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'ArrowRight' || e.key === 'd') truck.speedX = 0;
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'ArrowDown' || e.key === 's') truck.speedY = 0;
 });
 
 function drawTruck() {
     truck.x += truck.speedX;
+    truck.y += truck.speedY;
 
     if (truck.x < 0) truck.x = 0;
     if (truck.x + truck.width > canvas.width) truck.x = canvas.width - truck.width;
+    if (truck.y < 0) truck.y = 0;
+    if (truck.y + truck.height > canvas.height) truck.y = canvas.height - truck.height;
 
     ctx.drawImage(truckImage, truck.x, truck.y, truck.width, truck.height);
 }
 
 function initTraffic() {
     // Initialize traffic cars
-    for (let i = 0; i < 5; i++) { // Reduced number of cars
+    for (let i = 0; i < 5; i++) {
         const lane = Math.floor(Math.random() * 4) * 100 + 40;
         const carY = Math.random() * -canvas.height * 2; // Place cars randomly off-screen
         const image = trafficImages[Math.floor(Math.random() * trafficImages.length)];
