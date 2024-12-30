@@ -126,7 +126,7 @@ function checkCollision() {
 }
 
 function playCollisionSound() {
-    const sounds = ['assets/sounds/carpma.mp3', 'assets/sounds/carpma2.mp3', 'assets/sounds/carpma3.mp3'];
+    const sounds = ['assets/sounds/carpma1.mp3', 'assets/sounds/carpma2.mp3', 'assets/sounds/carpma3.mp3'];
     const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
     collisionSound.src = randomSound;
     collisionSound.play();
