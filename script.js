@@ -11,7 +11,7 @@ roadImage.src = 'assets/images/yol.png';
 const truckImage = new Image();
 truckImage.src = 'assets/images/chips.png';
 
-const enemyImages = [
+const trafficImages = [
     'assets/images/dusman1.png',
     'assets/images/dusman2.png',
     'assets/images/dusman3.png'
@@ -22,7 +22,7 @@ const enemyImages = [
 });
 
 let truck = { x: 200, y: 500, width: 50, height: 80 };
-let obstacles = [];
+let traffic = [];
 let gameOver = false;
 let gameStarted = false;
 
@@ -34,6 +34,7 @@ startButton.addEventListener('click', () => {
     gameStarted = true;
     startButton.style.display = 'none';
     bgMusic.play();
+    initTraffic();
     gameLoop();
 });
 
@@ -54,28 +55,34 @@ function drawTruck() {
     ctx.drawImage(truckImage, truck.x, truck.y, truck.width, truck.height);
 }
 
-function spawnObstacle() {
-    if (!gameStarted) return;
-    const x = Math.random() * (canvas.width - 60) + 30; // Keep within road bounds
-    const speed = 2 + Math.random() * 3;
-    const image = enemyImages[Math.floor(Math.random() * enemyImages.length)];
-    obstacles.push({ x, y: 0, width: 50, height: 80, speed, image });
+function initTraffic() {
+    // Initialize static traffic cars
+    for (let i = 0; i < 5; i++) {
+        const lane = Math.floor(Math.random() * 4) * 100 + 40;
+        const carY = Math.random() * canvas.height - canvas.height;
+        const image = trafficImages[Math.floor(Math.random() * trafficImages.length)];
+        traffic.push({ x: lane, y: carY, width: 50, height: 80, image });
+    }
 }
 
-function drawObstacles() {
-    obstacles.forEach(obstacle => {
-        ctx.drawImage(obstacle.image, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-        obstacle.y += obstacle.speed;
+function drawTraffic() {
+    traffic.forEach(car => {
+        ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
+        car.y += 2; // Cars move down slowly to simulate traffic
+        if (car.y > canvas.height) {
+            car.y = -car.height; // Reset car position
+            car.x = Math.floor(Math.random() * 4) * 100 + 40;
+        }
     });
 }
 
 function checkCollision() {
-    obstacles.forEach(obstacle => {
+    traffic.forEach(car => {
         if (
-            truck.x < obstacle.x + obstacle.width &&
-            truck.x + truck.width > obstacle.x &&
-            truck.y < obstacle.y + obstacle.height &&
-            truck.y + truck.height > obstacle.y
+            truck.x < car.x + car.width &&
+            truck.x + truck.width > car.x &&
+            truck.y < car.y + car.height &&
+            truck.y + truck.height > car.y
         ) {
             playCollisionSound();
             gameOver = true;
@@ -102,9 +109,7 @@ function gameLoop() {
 
     ctx.drawImage(roadImage, 0, 0, canvas.width, canvas.height);
     drawTruck();
-    drawObstacles();
+    drawTraffic();
     checkCollision();
     requestAnimationFrame(gameLoop);
 }
-
-setInterval(spawnObstacle, 1000);
