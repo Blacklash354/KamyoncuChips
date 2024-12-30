@@ -72,13 +72,13 @@ function initTraffic() {
         const lane = Math.floor(Math.random() * 4) * 100 + 40;
         const carY = Math.random() * -canvas.height * 2; // Place cars randomly off-screen
         const image = trafficImages[Math.floor(Math.random() * trafficImages.length)];
-        traffic.push({ x: lane, y: carY, width: 50, height: 80, image });
+        traffic.push({ x: lane, y: carY, width: 50, height: 80, image, speedY: 1 });
     }
 }
 
 function drawTraffic() {
     traffic.forEach(car => {
-        car.y += 2; // Simulate road moving down
+        car.y += car.speedY - truck.speedY / 5; // Cars move relative to player
         if (car.y > canvas.height) {
             car.y = -car.height; // Reset car position
             car.x = Math.floor(Math.random() * 4) * 100 + 40;
