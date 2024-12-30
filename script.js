@@ -42,13 +42,9 @@ document.addEventListener('keydown', (e) => {
     if (!gameStarted) return;
     if (e.key === 'ArrowLeft' || e.key === 'a') truck.x -= 10;
     if (e.key === 'ArrowRight' || e.key === 'd') truck.x += 10;
-    if (e.key === 'ArrowUp' || e.key === 'w') truck.y -= 10;
-    if (e.key === 'ArrowDown' || e.key === 's') truck.y += 10;
 
     if (truck.x < 0) truck.x = 0;
     if (truck.x + truck.width > canvas.width) truck.x = canvas.width - truck.width;
-    if (truck.y < 0) truck.y = 0;
-    if (truck.y + truck.height > canvas.height) truck.y = canvas.height - truck.height;
 });
 
 function drawTruck() {
@@ -56,19 +52,19 @@ function drawTruck() {
 }
 
 function initTraffic() {
-    // Initialize static traffic cars
-    for (let i = 0; i < 5; i++) {
+    // Initialize traffic cars
+    for (let i = 0; i < 10; i++) {
         const lane = Math.floor(Math.random() * 4) * 100 + 40;
-        const carY = Math.random() * canvas.height - canvas.height;
+        const carY = Math.random() * -canvas.height * 2; // Start off-screen
         const image = trafficImages[Math.floor(Math.random() * trafficImages.length)];
-        traffic.push({ x: lane, y: carY, width: 50, height: 80, image });
+        traffic.push({ x: lane, y: carY, width: 50, height: 80, image, speed: 2 + Math.random() * 3 });
     }
 }
 
 function drawTraffic() {
     traffic.forEach(car => {
         ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
-        car.y += 2; // Cars move down slowly to simulate traffic
+        car.y += car.speed; // Cars move down
         if (car.y > canvas.height) {
             car.y = -car.height; // Reset car position
             car.x = Math.floor(Math.random() * 4) * 100 + 40;
