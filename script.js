@@ -36,18 +36,29 @@ let gameStarted = false;
 let roadOffset = 0; // For simulating road movement
 let score = 0; // For tracking score
 
-const bgMusic = document.getElementById('bg-music');
+const bgMusic = new Audio('assets/sounds/background.mp3'); // Background music
 const collisionSound = document.getElementById('collision-sound');
 const startSound = new Audio('assets/sounds/basla.mp3'); // Start button sound
+
+// Ensure background music loops
+bgMusic.loop = true;
 
 // Start the game when the button is clicked
 startButton.addEventListener('click', () => {
     gameStarted = true;
     startButton.style.display = 'none';
-    startSound.play().catch(error => {
+
+    // Play start sound and wait for it to finish before starting background music
+    startSound.play().then(() => {
+        startSound.onended = () => {
+            bgMusic.play();
+        };
+    }).catch(error => {
         console.error('Start sound could not play:', error);
-    }); // Play start sound
-    bgMusic.play();
+        // If an error occurs, start background music immediately
+        bgMusic.play();
+    });
+
     initTraffic();
     gameLoop();
 });
@@ -103,7 +114,6 @@ function drawTraffic() {
         }
     });
 }
-
 
 function drawRoad() {
     roadOffset += 2;
