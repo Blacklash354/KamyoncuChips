@@ -90,15 +90,20 @@ function initTraffic() {
 
 function drawTraffic() {
     traffic.forEach(car => {
-        car.y += car.speedY - truck.speedY / 5; // Cars move relative to player
-        if (car.y > canvas.height) {
-            car.y = -car.height; // Reset car position
-            car.x = Math.floor(Math.random() * 4) * 100 + 40;
-            score += 1; // Increase score when a car is passed
+        if (car.image.complete && car.image.naturalWidth > 0) {
+            car.y += car.speedY - truck.speedY / 5; // Cars move relative to player
+            if (car.y > canvas.height) {
+                car.y = -car.height; // Reset car position
+                car.x = Math.floor(Math.random() * 4) * 100 + 40;
+                score += 1; // Increase score when a car is passed
+            }
+            ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
+        } else {
+            console.error(`Image not loaded: ${car.image.src}`);
         }
-        ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
     });
 }
+
 
 function drawRoad() {
     roadOffset += 2;
