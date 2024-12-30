@@ -45,7 +45,7 @@ function drawTruck() {
 }
 
 function spawnObstacle() {
-    const x = Math.random() * (canvas.width - 50);
+    const x = Math.random() * (canvas.width - 60) + 30; // Keep within road bounds
     const speed = 2 + Math.random() * 3;
     const image = enemyImages[Math.floor(Math.random() * enemyImages.length)];
     obstacles.push({ x, y: 0, width: 50, height: 80, speed, image });
