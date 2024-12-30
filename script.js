@@ -138,8 +138,8 @@ function gameLoop() {
     if (gameOver) {
         ctx.fillStyle = 'white';
         ctx.font = '30px Arial';
-        ctx.fillText('Game Over!', 150, 320);
-        ctx.fillText('Press F5 to Retry', 100, 360);
+        ctx.fillText('PATLAK BASARAMADIN', 150, 320);
+        ctx.fillText('F5 BAS LA GOT', 100, 360);
         bgMusic.pause();
         return;
     }
