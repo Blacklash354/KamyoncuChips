@@ -36,7 +36,7 @@ let gameStarted = false;
 let roadOffset = 0; // For simulating road movement
 let score = 0; // For tracking score
 
-const bgMusic = new Audio('assets/sounds/background.mp3'); // Background music
+const bgMusic = new Audio('assets/sounds/basla2.mp3'); // Background music
 const collisionSound = document.getElementById('collision-sound');
 const startSound = new Audio('assets/sounds/basla.mp3'); // Start button sound
 
