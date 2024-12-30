@@ -110,7 +110,7 @@ function drawRoad() {
 function drawScore() {
     ctx.fillStyle = 'white';
     ctx.font = '20px Arial';
-    ctx.fillText(`Score: ${score}`, 10, 30);
+    ctx.fillText(`Patlak Skor: ${score}`, 10, 30);
 }
 
 function checkCollision() {
