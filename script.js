@@ -15,7 +15,14 @@ truckImage.src = 'assets/images/chips.png';
 const trafficImages = [
     'assets/images/dusman1.png',
     'assets/images/dusman2.png',
-    'assets/images/dusman3.png'
+    'assets/images/dusman3.png',
+    'assets/images/dusman4.png',
+    'assets/images/dusman5.png',
+    'assets/images/dusman6.png',
+    'assets/images/dusman7.png',
+    'assets/images/dusman8.png'
+    'assets/images/dusman9.png'
+    'assets/images/dusman10.png'
 ].map(src => {
     const img = new Image();
     img.src = src;
@@ -31,7 +38,7 @@ let score = 0; // For tracking score
 
 const bgMusic = document.getElementById('bg-music');
 const collisionSound = document.getElementById('collision-sound');
-const startSound = new Audio('assets/sounds/start.mp3'); // Start button sound
+const startSound = new Audio('assets/sounds/basla.mp3'); // Start button sound
 
 // Start the game when the button is clicked
 startButton.addEventListener('click', () => {
@@ -119,7 +126,7 @@ function checkCollision() {
 }
 
 function playCollisionSound() {
-    const sounds = ['assets/sounds/collision1.mp3', 'assets/sounds/collision2.mp3', 'assets/sounds/collision3.mp3'];
+    const sounds = ['assets/sounds/carpma.mp3', 'assets/sounds/carpma2.mp3', 'assets/sounds/carpma3.mp3'];
     const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
     collisionSound.src = randomSound;
     collisionSound.play();
