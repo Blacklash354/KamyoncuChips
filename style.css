@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #333;
+}
+
+#game-container {
+    width: 480px;
+    height: 640px;
+    position: relative;
+    border: 2px solid #fff;
+}
+
+canvas {
+    display: block;
+}
