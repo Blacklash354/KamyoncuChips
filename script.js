@@ -20,8 +20,8 @@ const trafficImages = [
     'assets/images/dusman5.png',
     'assets/images/dusman6.png',
     'assets/images/dusman7.png',
-    'assets/images/dusman8.png'
-    'assets/images/dusman9.png'
+    'assets/images/dusman8.png',
+    'assets/images/dusman9.png',
     'assets/images/dusman10.png'
 ].map(src => {
     const img = new Image();
