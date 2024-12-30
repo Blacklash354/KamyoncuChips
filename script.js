@@ -21,7 +21,7 @@ const trafficImages = [
     return img;
 });
 
-let truck = { x: 200, y: 500, width: 50, height: 80 };
+let truck = { x: 200, y: 500, width: 50, height: 80, speedX: 0, speedY: 0 };
 let traffic = [];
 let gameOver = false;
 let gameStarted = false;
@@ -38,26 +38,39 @@ startButton.addEventListener('click', () => {
     gameLoop();
 });
 
+// Handle key press for smooth movement
 document.addEventListener('keydown', (e) => {
     if (!gameStarted) return;
-    if (e.key === 'ArrowLeft' || e.key === 'a') truck.x -= 10;
-    if (e.key === 'ArrowRight' || e.key === 'd') truck.x += 10;
+    if (e.key === 'ArrowLeft' || e.key === 'a') truck.speedX = -5;
+    if (e.key === 'ArrowRight' || e.key === 'd') truck.speedX = 5;
+    if (e.key === 'ArrowUp' || e.key === 'w') truck.speedY = -5;
+    if (e.key === 'ArrowDown' || e.key === 's') truck.speedY = 5;
+});
 
-    if (truck.x < 0) truck.x = 0;
-    if (truck.x + truck.width > canvas.width) truck.x = canvas.width - truck.width;
+document.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'ArrowRight' || e.key === 'd') truck.speedX = 0;
+    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'ArrowDown' || e.key === 's') truck.speedY = 0;
 });
 
 function drawTruck() {
+    truck.x += truck.speedX;
+    truck.y += truck.speedY;
+
+    if (truck.x < 0) truck.x = 0;
+    if (truck.x + truck.width > canvas.width) truck.x = canvas.width - truck.width;
+    if (truck.y < 0) truck.y = 0;
+    if (truck.y + truck.height > canvas.height) truck.y = canvas.height - truck.height;
+
     ctx.drawImage(truckImage, truck.x, truck.y, truck.width, truck.height);
 }
 
 function initTraffic() {
     // Initialize traffic cars
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {  // Reduced traffic cars
         const lane = Math.floor(Math.random() * 4) * 100 + 40;
         const carY = Math.random() * -canvas.height * 2; // Start off-screen
         const image = trafficImages[Math.floor(Math.random() * trafficImages.length)];
-        traffic.push({ x: lane, y: carY, width: 50, height: 80, image, speed: 2 + Math.random() * 3 });
+        traffic.push({ x: lane, y: carY, width: 50, height: 80, image, speed: 1 + Math.random() * 2 }); // Slower speed
     }
 }
 
