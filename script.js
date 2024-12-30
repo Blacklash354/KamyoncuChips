@@ -3,6 +3,23 @@ const ctx = canvas.getContext('2d');
 canvas.width = 480;
 canvas.height = 640;
 
+// Load images
+const roadImage = new Image();
+roadImage.src = 'assets/images/yol.jpg';
+
+const truckImage = new Image();
+truckImage.src = 'assets/images/chips.png';
+
+const enemyImages = [
+    'assets/images/dusman1.png',
+    'assets/images/dusman2.png',
+    'assets/images/dusman3.png'
+].map(src => {
+    const img = new Image();
+    img.src = src;
+    return img;
+});
+
 let truck = { x: 200, y: 500, width: 50, height: 80 };
 let obstacles = [];
 let gameOver = false;
@@ -24,20 +41,19 @@ document.addEventListener('keydown', (e) => {
 });
 
 function drawTruck() {
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(truck.x, truck.y, truck.width, truck.height);
+    ctx.drawImage(truckImage, truck.x, truck.y, truck.width, truck.height);
 }
 
 function spawnObstacle() {
     const x = Math.random() * (canvas.width - 50);
     const speed = 2 + Math.random() * 3;
-    obstacles.push({ x, y: 0, width: 50, height: 80, speed });
+    const image = enemyImages[Math.floor(Math.random() * enemyImages.length)];
+    obstacles.push({ x, y: 0, width: 50, height: 80, speed, image });
 }
 
 function drawObstacles() {
-    ctx.fillStyle = 'red';
     obstacles.forEach(obstacle => {
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        ctx.drawImage(obstacle.image, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
         obstacle.y += obstacle.speed;
     });
 }
@@ -73,7 +89,7 @@ function gameLoop() {
         return;
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(roadImage, 0, 0, canvas.width, canvas.height);
     drawTruck();
     drawObstacles();
     checkCollision();
