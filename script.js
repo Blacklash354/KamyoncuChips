@@ -27,20 +27,20 @@ const trafficImages = [
     'assets/images/dusman12.png',
     'assets/images/dusman13.png',
     'assets/images/dusman14.png',
-     'assets/images/dusman15.png',
-'assets/images/dusman16.png',
-'assets/images/dusman17.png',
-'assets/images/dusman18.png',
-'assets/images/dusman19.png',
-'assets/images/dusman20.png',
-'assets/images/dusman21.png',
-'assets/images/dusman22.png',
-'assets/images/dusman23.png',
-'assets/images/dusman24.png',
-'assets/images/dusman25.png',
-'assets/images/dusman26.png',
-'assets/images/dusman27.png',
-'assets/images/dusman28.png'
+    'assets/images/dusman15.png',
+    'assets/images/dusman16.png',
+    'assets/images/dusman17.png',
+    'assets/images/dusman18.png',
+    'assets/images/dusman19.png',
+    'assets/images/dusman20.png',
+    'assets/images/dusman21.png',
+    'assets/images/dusman22.png',
+    'assets/images/dusman23.png',
+    'assets/images/dusman24.png',
+    'assets/images/dusman25.png',
+    'assets/images/dusman26.png',
+    'assets/images/dusman27.png',
+    'assets/images/dusman28.png'
 ].map(src => {
     const img = new Image();
     img.src = src;
@@ -61,19 +61,43 @@ const startSound = new Audio('assets/sounds/basla.mp3'); // Start button sound
 // Ensure background music loops
 bgMusic.loop = true;
 
+// Preload all images
+function preloadImages(images, callback) {
+    let loadedCount = 0;
+    images.forEach(image => {
+        image.onload = () => {
+            loadedCount++;
+            if (loadedCount === images.length) {
+                callback();
+            }
+        };
+        image.onerror = () => {
+            console.error(`Failed to load image: ${image.src}`);
+            loadedCount++;
+            if (loadedCount === images.length) {
+                callback();
+            }
+        };
+    });
+}
+
+// Wait for images to preload before starting
+preloadImages([roadImage, truckImage, ...trafficImages], () => {
+    console.log('All images loaded successfully.');
+    startButton.style.display = 'block'; // Show start button after images are loaded
+});
+
 // Start the game when the button is clicked
 startButton.addEventListener('click', () => {
     gameStarted = true;
     startButton.style.display = 'none';
 
-    // Play start sound and wait for it to finish before starting background music
     startSound.play().then(() => {
         startSound.onended = () => {
             bgMusic.play();
         };
     }).catch(error => {
         console.error('Start sound could not play:', error);
-        // If an error occurs, start background music immediately
         bgMusic.play();
     });
 
@@ -151,7 +175,6 @@ function drawTraffic() {
         }
     });
 }
-
 
 function drawRoad() {
     roadOffset += 2;
