@@ -108,11 +108,20 @@ function drawTruck() {
 }
 
 function initTraffic() {
-    // Initialize traffic cars
+    // Shuffle traffic images to ensure no repeats until all are used
+    let unusedImages = [...trafficImages]; // Copy of all images
+
     for (let i = 0; i < 5; i++) {
         const lane = Math.floor(Math.random() * 4) * 100 + 40;
         const carY = Math.random() * -canvas.height * 2; // Place cars randomly off-screen
-        const image = trafficImages[Math.floor(Math.random() * trafficImages.length)];
+
+        // Ensure unique images
+        if (unusedImages.length === 0) {
+            unusedImages = [...trafficImages]; // Reset if all images are used
+        }
+        const randomIndex = Math.floor(Math.random() * unusedImages.length);
+        const image = unusedImages.splice(randomIndex, 1)[0]; // Remove and get the image
+
         traffic.push({ x: lane, y: carY, width: 50, height: 80, image, speedY: 1 });
     }
 }
@@ -124,6 +133,16 @@ function drawTraffic() {
             if (car.y > canvas.height) {
                 car.y = -car.height; // Reset car position
                 car.x = Math.floor(Math.random() * 4) * 100 + 40;
+
+                // Select a new unique image
+                let unusedImages = [...trafficImages];
+                traffic.forEach(trafficCar => {
+                    unusedImages = unusedImages.filter(img => img !== trafficCar.image);
+                });
+                if (unusedImages.length === 0) unusedImages = [...trafficImages]; // Reset if all used
+                const randomIndex = Math.floor(Math.random() * unusedImages.length);
+                car.image = unusedImages.splice(randomIndex, 1)[0];
+
                 score += 1; // Increase score when a car is passed
             }
             ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
