@@ -54,6 +54,7 @@ let gameStarted = false;
 let roadOffset = 0; // For simulating road movement
 let score = 0; // For tracking score
 let speedMultiplier = 1; // Speed multiplier to increase game difficulty
+let baseSpeed = 2; // Base speed of the game
 
 const bgMusic = new Audio('assets/sounds/basla2.mp3'); // Background music
 const collisionSound = document.getElementById('collision-sound');
@@ -154,7 +155,7 @@ function initTraffic() {
 function drawTraffic() {
     traffic.forEach(car => {
         if (car.image.complete && car.image.naturalWidth > 0) {
-            car.y += (car.speedY + speedMultiplier) - truck.speedY / 5; // Cars move relative to player
+            car.y += (car.speedY + baseSpeed * speedMultiplier) - truck.speedY / 5; // Cars move relative to player
             if (car.y > canvas.height) {
                 car.y = -car.height; // Reset car position
                 car.x = Math.floor(Math.random() * 4) * 100 + 40;
@@ -182,7 +183,7 @@ function drawTraffic() {
 }
 
 function drawRoad() {
-    roadOffset += (2 + speedMultiplier); // Road moves faster with speedMultiplier
+    roadOffset += (baseSpeed + speedMultiplier); // Road moves faster with speedMultiplier
     if (roadOffset > canvas.height) roadOffset = 0;
     ctx.drawImage(roadImage, 0, roadOffset - canvas.height, canvas.width, canvas.height);
     ctx.drawImage(roadImage, 0, roadOffset, canvas.width, canvas.height);
@@ -225,8 +226,8 @@ function gameLoop() {
         return;
     }
 
-    // Increase speedMultiplier based on score
-    speedMultiplier = Math.min(5, 1 + score / 50); // Max speedMultiplier is 5
+    // Gradually increase speedMultiplier based on score
+    speedMultiplier = 1 + Math.min(2, score / 100); // SpeedMultiplier starts at 1 and caps at 3
 
     drawRoad();
     drawTruck();
