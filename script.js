@@ -230,7 +230,7 @@ function gameLoop() {
         return;
     }
 
-    speedMultiplier = 1 + Math.min(2, score / 100);
+    speedMultiplier = 1 + score / 100; // Remove cap on speedMultiplier
 
     drawRoad();
     drawTruck();
