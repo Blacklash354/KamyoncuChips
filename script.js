@@ -53,7 +53,7 @@ let gameStarted = false;
 let roadOffset = 0; // For simulating road movement
 let score = 0; // For tracking score
 let speedMultiplier = 1; // Speed multiplier to increase game difficulty
-let baseSpeed = 2; // Base speed of the game (modifiable by player)
+let baseSpeed = 1; // Base speed of the game (modifiable by player)
 let distanceTraveled = 0; // Distance traveled by the player
 
 const bgMusic = new Audio('assets/sounds/basla2.mp3'); // Background music
