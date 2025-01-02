@@ -169,12 +169,17 @@ function drawTraffic() {
 
                 score += 1; // Increase score when a car is passed
             }
-            ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
+            try {
+                ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
+            } catch (error) {
+                console.error(`Failed to draw image: ${car.image.src}`, error);
+            }
         } else {
-            console.error(`Image not loaded or broken: ${car.image.src}`);
+            console.warn(`Image not loaded or broken: ${car.image.src}`);
         }
     });
 }
+
 
 function drawRoad() {
     roadOffset += 2;
