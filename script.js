@@ -133,46 +133,43 @@ function drawTruck() {
     ctx.drawImage(truckImage, truck.x, truck.y, truck.width, truck.height);
 }
 
-
 function initTraffic() {
-    // Shuffle traffic images to ensure no repeats until all are used
-    let unusedImages = [...trafficImages]; // Copy of all images
-
+    let unusedImages = [...trafficImages];
     for (let i = 0; i < 5; i++) {
-        const lane = Math.floor(Math.random() * 4); // Choose one of 4 lanes
+        const lane = Math.floor(Math.random() * 4); // Random lane (0-3)
         const carX = lane * (canvas.width / 4) + (canvas.width / 8) - 25; // Center car in the lane
         const carY = Math.random() * -canvas.height * 2; // Place cars randomly off-screen
 
-        // Ensure unique images
         if (unusedImages.length === 0) {
-            unusedImages = [...trafficImages]; // Reset if all images are used
+            unusedImages = [...trafficImages];
         }
         const randomIndex = Math.floor(Math.random() * unusedImages.length);
-        const image = unusedImages.splice(randomIndex, 1)[0]; // Remove and get the image
+        const image = unusedImages.splice(randomIndex, 1)[0];
 
         traffic.push({ x: carX, y: carY, width: 50, height: 80, image, speedY: 1 });
     }
 }
 
-
 function drawTraffic() {
     traffic.forEach(car => {
         if (car.image.complete && car.image.naturalWidth > 0) {
-            car.y += (car.speedY + baseSpeed * speedMultiplier) - truck.speedY / 5; // Cars move relative to player
+            car.y += (car.speedY + baseSpeed * speedMultiplier) - truck.speedY / 5;
             if (car.y > canvas.height) {
-                car.y = -car.height; // Reset car position
-                car.x = Math.floor(Math.random() * 4) * 100 + 40;
+                const playerLane = Math.floor(truck.x / (canvas.width / 4)); // Determine player's lane
+                const randomLane = Math.random() < 0.7 ? playerLane : Math.floor(Math.random() * 4); // 70% chance to spawn in player's lane
+                const carX = randomLane * (canvas.width / 4) + (canvas.width / 8) - 25; // Center car in lane
+                car.y = -car.height;
+                car.x = carX;
 
-                // Benzersiz bir resim seç
                 let unusedImages = [...trafficImages];
                 traffic.forEach(trafficCar => {
                     unusedImages = unusedImages.filter(img => img !== trafficCar.image);
                 });
-                if (unusedImages.length === 0) unusedImages = [...trafficImages]; // Reset if all used
+                if (unusedImages.length === 0) unusedImages = [...trafficImages];
                 const randomIndex = Math.floor(Math.random() * unusedImages.length);
                 car.image = unusedImages.splice(randomIndex, 1)[0];
 
-                score += 1; // Increase score when a car is passed
+                score += 1;
             }
             try {
                 ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
@@ -187,7 +184,7 @@ function drawTraffic() {
 
 function drawRoad() {
     const speed = baseSpeed + speedMultiplier;
-    roadOffset += speed; // Road moves faster with speedMultiplier
+    roadOffset += speed;
     if (roadOffset > canvas.height) roadOffset = 0;
     ctx.drawImage(roadImage, 0, roadOffset - canvas.height, canvas.width, canvas.height);
     ctx.drawImage(roadImage, 0, roadOffset, canvas.width, canvas.height);
@@ -197,8 +194,8 @@ function drawScoreAndSpeed() {
     ctx.fillStyle = 'white';
     ctx.font = '20px Arial';
     ctx.fillText(`Patlak Skor: ${score}`, 10, 30);
-    const speedKmh = Math.round(baseSpeed * 20 + speedMultiplier * 20); // Convert speed to km/h
-    const speedMph = Math.round(speedKmh * 0.621371); // Convert km/h to mph
+    const speedKmh = Math.round(baseSpeed * 20 + speedMultiplier * 20);
+    const speedMph = Math.round(speedKmh * 0.621371);
     ctx.fillText(`Hız: ${speedKmh} km/h (${speedMph} mph)`, 10, 60);
 }
 
@@ -233,8 +230,7 @@ function gameLoop() {
         return;
     }
 
-    // Gradually increase speedMultiplier based on score
-    speedMultiplier = 1 + Math.min(2, score / 100); // SpeedMultiplier starts at 1 and caps at 3
+    speedMultiplier = 1 + Math.min(2, score / 100);
 
     drawRoad();
     drawTruck();
