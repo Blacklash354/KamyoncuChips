@@ -1,3 +1,4 @@
+// HTML Structure
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
@@ -54,7 +55,6 @@ let roadOffset = 0; // For simulating road movement
 let score = 0; // For tracking score
 let speedMultiplier = 1; // Speed multiplier to increase game difficulty
 let baseSpeed = 1; // Base speed of the game (modifiable by player)
-let distanceTraveled = 0; // Distance traveled by the player
 
 const bgMusic = new Audio('assets/sounds/basla2.mp3'); // Background music
 const collisionSound = document.getElementById('collision-sound');
@@ -185,7 +185,6 @@ function drawTraffic() {
 function drawRoad() {
     const speed = baseSpeed + speedMultiplier;
     roadOffset += speed; // Road moves faster with speedMultiplier
-    distanceTraveled += speed * 0.1; // Increase distance traveled based on speed
     if (roadOffset > canvas.height) roadOffset = 0;
     ctx.drawImage(roadImage, 0, roadOffset - canvas.height, canvas.width, canvas.height);
     ctx.drawImage(roadImage, 0, roadOffset, canvas.width, canvas.height);
@@ -195,10 +194,9 @@ function drawScoreAndSpeed() {
     ctx.fillStyle = 'white';
     ctx.font = '20px Arial';
     ctx.fillText(`Patlak Skor: ${score}`, 10, 30);
-    const speedKmh = Math.round((baseSpeed + speedMultiplier) * 20); // Convert speed to km/h
+    const speedKmh = Math.round(baseSpeed * 20 + speedMultiplier * 20); // Convert speed to km/h
     const speedMph = Math.round(speedKmh * 0.621371); // Convert km/h to mph
     ctx.fillText(`Hız: ${speedKmh} km/h (${speedMph} mph)`, 10, 60);
-    ctx.fillText(`Mesafe: ${Math.round(distanceTraveled)} km`, 10, 90);
 }
 
 function checkCollision() {
