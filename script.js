@@ -134,7 +134,7 @@ function drawTraffic() {
                 car.y = -car.height; // Reset car position
                 car.x = Math.floor(Math.random() * 4) * 100 + 40;
 
-                // Select a new unique image
+                // Benzersiz bir resim seç
                 let unusedImages = [...trafficImages];
                 traffic.forEach(trafficCar => {
                     unusedImages = unusedImages.filter(img => img !== trafficCar.image);
@@ -147,10 +147,11 @@ function drawTraffic() {
             }
             ctx.drawImage(car.image, car.x, car.y, car.width, car.height);
         } else {
-            console.error(`Image not loaded: ${car.image.src}`);
+            console.error(`Image not loaded or broken: ${car.image.src}`);
         }
     });
 }
+
 
 function drawRoad() {
     roadOffset += 2;
