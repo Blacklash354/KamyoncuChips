@@ -22,7 +22,25 @@ const trafficImages = [
     'assets/images/dusman7.png',
     'assets/images/dusman8.png',
     'assets/images/dusman9.png',
-    'assets/images/dusman10.png'
+    'assets/images/dusman10.png',
+    'assets/images/dusman11.png',
+    'assets/images/dusman12.png',
+    'assets/images/dusman13.png',
+    'assets/images/dusman14.png',
+     'assets/images/dusman15.png',
+'assets/images/dusman16.png',
+'assets/images/dusman17.png',
+'assets/images/dusman18.png',
+'assets/images/dusman19.png',
+'assets/images/dusman20.png',
+'assets/images/dusman21.png',
+'assets/images/dusman22.png',
+'assets/images/dusman23.png',
+'assets/images/dusman24.png',
+'assets/images/dusman25.png',
+'assets/images/dusman26.png',
+'assets/images/dusman27.png',
+'assets/images/dusman28.png'
 ].map(src => {
     const img = new Image();
     img.src = src;
