@@ -133,12 +133,14 @@ function drawTruck() {
     ctx.drawImage(truckImage, truck.x, truck.y, truck.width, truck.height);
 }
 
+
 function initTraffic() {
     // Shuffle traffic images to ensure no repeats until all are used
     let unusedImages = [...trafficImages]; // Copy of all images
 
     for (let i = 0; i < 5; i++) {
-        const lane = Math.floor(Math.random() * 4) * 100 + 40;
+        const lane = Math.floor(Math.random() * 4); // Choose one of 4 lanes
+        const carX = lane * (canvas.width / 4) + (canvas.width / 8) - 25; // Center car in the lane
         const carY = Math.random() * -canvas.height * 2; // Place cars randomly off-screen
 
         // Ensure unique images
@@ -148,9 +150,10 @@ function initTraffic() {
         const randomIndex = Math.floor(Math.random() * unusedImages.length);
         const image = unusedImages.splice(randomIndex, 1)[0]; // Remove and get the image
 
-        traffic.push({ x: lane, y: carY, width: 50, height: 80, image, speedY: 1 });
+        traffic.push({ x: carX, y: carY, width: 50, height: 80, image, speedY: 1 });
     }
 }
+
 
 function drawTraffic() {
     traffic.forEach(car => {
